@@ -1,34 +1,16 @@
 import { TriangleDownIcon } from '@chakra-ui/icons';
 import { Avatar, Grid, GridItem, Text } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-const Messages = () => {
-  const [messages, setMessages] = useState([
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-  ]);
+interface propArgs {
+  messages: {
+    user: string;
+    text: string;
+  }[];
+  user: string;
+}
 
-  const user = 'me';
-
+const Messages = ({ messages, user }: propArgs) => {
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
