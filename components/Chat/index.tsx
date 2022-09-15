@@ -57,7 +57,6 @@ const Chat = () => {
             ) as unknown as IMessage[])
           : ([] as unknown as IMessage[]);
         if (updatedMessages?.length) setMessages(updatedMessages);
-        console.log(updatedMessages);
       }, 1000);
     }
   }, [user]);
