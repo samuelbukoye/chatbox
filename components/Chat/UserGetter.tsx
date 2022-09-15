@@ -28,12 +28,12 @@ const UserGetter = ({ setUser, showModal }: propArgs) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Enter Your Name</ModalHeader>
-          <ModalBody>
+          <ModalBody pb="30px">
             <Grid w="90%" gridTemplateColumns={'1fr 25%'} h="40%">
               <Input
                 placeholder="Type Something..."
                 w="full"
-                h="full"
+                h="50px"
                 borderLeftRadius="lg"
                 borderRightRadius="0"
                 border="1px solid black"
@@ -42,7 +42,7 @@ const UserGetter = ({ setUser, showModal }: propArgs) => {
                 }}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') {
-                    setUser(inputMessage);
+                    setUser(inputMessage.trim());
                   }
                 }}
                 value={inputMessage}
@@ -55,7 +55,7 @@ const UserGetter = ({ setUser, showModal }: propArgs) => {
                 borderLeftRadius="0"
                 borderRightRadius="lg"
                 w="full"
-                h="full"
+                h="50px"
                 p="0"
                 _hover={{
                   bg: 'white',
@@ -63,7 +63,7 @@ const UserGetter = ({ setUser, showModal }: propArgs) => {
                   border: '1px solid black',
                 }}
                 disabled={inputMessage.trim().length <= 0}
-                onClick={() => setUser(inputMessage)}
+                onClick={() => setUser(inputMessage.trim())}
               >
                 Send
               </Button>
