@@ -14,12 +14,17 @@ const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    if (elementRef?.current && !isScrolled) {
-      elementRef.current.scrollIntoView();
-      setIsScrolled(true);
-    }
-  }, [isScrolled]);
+  const ScrollToBottom = () => {
+    const elementRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      if (elementRef?.current && user && !isScrolled && messages?.length) {
+        elementRef.current.scrollIntoView();
+        setIsScrolled(true);
+      }
+    });
+
+    return <Grid ref={elementRef} />;
+  };
 
   return (
     <Grid w="full" h="Full" overflowY="scroll" pt="6" pb="3" px="3" gridGap="6">
@@ -56,7 +61,7 @@ const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
             >
               <Avatar
                 name={item.user}
-                src="https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"
+                // src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"
                 bg="blue.300"
                 transform={'translate(-5px, -45%)'}
               ></Avatar>
@@ -123,7 +128,7 @@ const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
               </Grid>
               <Avatar
                 name={item.user}
-                src="https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"
+                // src="https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"
                 bg="blue.300"
                 transform={'translate(5px, -45%)'}
               ></Avatar>
@@ -131,7 +136,7 @@ const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
           );
         }
       })}
-      <Grid ref={elementRef} />
+      <ScrollToBottom />
     </Grid>
   );
 };
