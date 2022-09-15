@@ -11,7 +11,6 @@ interface propArgs {
 }
 
 const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
-  const elementRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const ScrollToBottom = () => {
