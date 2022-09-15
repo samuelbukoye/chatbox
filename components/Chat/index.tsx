@@ -1,34 +1,55 @@
 import { Grid } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { IMessage } from '../../utils/interfaces';
 import Footer from './Footer';
 import Header from './Header';
 import Messages from './Messages';
+import UserGetter from './UserGetter';
 
 const Chat = () => {
-  const [messages, setMessages] = useState([
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-  ]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+
   const [inputMessage, setInputMessage] = useState('');
+  const [trimmedMessage, setTrimmedMessage] = useState<IMessage[]>([]);
+  const [pagination, setPagination] = useState(1);
+  const [isPaginated, setIsPaginated] = useState(false);
+  const [user, setUser] = useState('');
+
+  const messagePerPage = 10;
+
+  useEffect(() => {
+    if (messages.length > messagePerPage * pagination) {
+      setIsPaginated(true);
+    } else {
+      setIsPaginated(false);
+    }
+  }, [messages.length, pagination]);
+
+  useEffect(() => {
+    if (messages.length > messagePerPage * pagination) {
+      setIsPaginated(true);
+    } else {
+      setIsPaginated(false);
+    }
+  }, [messages.length, pagination]);
+
+  useEffect(() => {
+    const newNumber = pagination * messagePerPage * -1;
+    const newMessage = messages.slice(newNumber);
+    setTrimmedMessage(newMessage);
+  }, [messages, pagination]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const updatedMessages: IMessage[] = localStorage.getItem('message')
+        ? (JSON.parse(
+            localStorage.getItem('message') as string
+          ) as unknown as IMessage[])
+        : ([] as unknown as IMessage[]);
+      if (updatedMessages?.length) setMessages(updatedMessages);
+      console.log(updatedMessages);
+    }, 1000);
+  }, []);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim().length) {
@@ -36,14 +57,13 @@ const Chat = () => {
     }
     const data = inputMessage;
 
-    setMessages((old) => [...old, { user: 'me', text: data }]);
+    localStorage.setItem(
+      'message',
+      JSON.stringify([...messages, { user, text: data }])
+    );
+    setMessages((old) => [...old, { user, text: data }]);
     setInputMessage('');
-
-    setTimeout(() => {
-      setMessages((old) => [...old, { user: 'computer', text: data }]);
-    }, 1000);
   };
-  const user = 'me';
 
   return (
     <Grid
@@ -52,7 +72,9 @@ const Chat = () => {
       w={'100vw'}
       h={'100vh'}
       bg={'white'}
+      pos={'relative'}
     >
+      {user && <UserGetter setUser={setUser} />}
       <Grid
         w={'500px'}
         h={'90vh'}
@@ -62,7 +84,12 @@ const Chat = () => {
         border={'5px solid black'}
       >
         <Header user={user} />
-        <Messages messages={messages} user={user} />
+        <Messages
+          isPaginated={isPaginated}
+          messages={trimmedMessage}
+          user={user}
+          setPagination={setPagination}
+        />
         <Footer
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}

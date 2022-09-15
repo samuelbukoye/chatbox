@@ -9,7 +9,7 @@ const Header = ({ user }: propArgs) => {
     <Grid
       alignItems={'center'}
       justifyContent={'center'}
-      bg={'black'}
+      bg={'gray.700'}
       textTransform="uppercase"
       color="gray.400"
       fontWeight="extrabold"

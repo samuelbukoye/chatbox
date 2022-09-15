@@ -1,29 +1,49 @@
-import { TriangleDownIcon } from '@chakra-ui/icons';
-import { Avatar, Grid, GridItem, Text } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { ChevronUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
+import { Avatar, Button, Grid, GridItem, Text } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { IMessage, setNumberStateType } from '../../utils/interfaces';
 
 interface propArgs {
-  messages: {
-    user: string;
-    text: string;
-  }[];
+  messages: IMessage[];
   user: string;
+  isPaginated: boolean;
+  setPagination: setNumberStateType;
 }
 
-const Messages = ({ messages, user }: propArgs) => {
-  const AlwaysScrollToBottom = () => {
-    const elementRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-      if (elementRef?.current) {
-        elementRef.current.scrollIntoView();
-      }
-    });
+const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-    return <Grid ref={elementRef} />;
-  };
+  useEffect(() => {
+    if (elementRef?.current && !isScrolled) {
+      elementRef.current.scrollIntoView();
+      setIsScrolled(true);
+    }
+  }, [isScrolled]);
 
   return (
     <Grid w="full" h="Full" overflowY="scroll" pt="6" pb="3" px="3" gridGap="6">
+      {isPaginated && (
+        <GridItem w="full" alignItems="center" justifyContent="center">
+          <Button
+            w="max-content"
+            margin="auto"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            rightIcon={<ChevronUpIcon />}
+            colorScheme="blue"
+            fontWeight="bold"
+            py="2"
+            px="3"
+            borderRadius="2xl"
+            onClick={() => setPagination((old) => old + 1)}
+          >
+            Show More
+          </Button>
+        </GridItem>
+      )}
+
       {messages.map((item, index) => {
         if (item.user === user) {
           return (
@@ -111,7 +131,7 @@ const Messages = ({ messages, user }: propArgs) => {
           );
         }
       })}
-      <AlwaysScrollToBottom />
+      <Grid ref={elementRef} />
     </Grid>
   );
 };

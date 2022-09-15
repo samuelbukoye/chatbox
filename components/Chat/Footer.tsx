@@ -1,8 +1,9 @@
 import { Button, Flex, Grid, Input } from '@chakra-ui/react';
+import { setStringStateType } from '../../utils/interfaces';
 
 interface propArgs {
   inputMessage: string;
-  setInputMessage: React.Dispatch<React.SetStateAction<string>>;
+  setInputMessage: setStringStateType;
   handleSendMessage: () => void;
 }
 
