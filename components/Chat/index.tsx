@@ -14,8 +14,17 @@ const Chat = () => {
   const [pagination, setPagination] = useState(1);
   const [isPaginated, setIsPaginated] = useState(false);
   const [user, setUser] = useState('');
+  const [showModal, setShowModal] = useState(true);
 
   const messagePerPage = 10;
+
+  useEffect(() => {
+    if (!user) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (messages.length > messagePerPage * pagination) {
@@ -40,16 +49,18 @@ const Chat = () => {
   }, [messages, pagination]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const updatedMessages: IMessage[] = localStorage.getItem('message')
-        ? (JSON.parse(
-            localStorage.getItem('message') as string
-          ) as unknown as IMessage[])
-        : ([] as unknown as IMessage[]);
-      if (updatedMessages?.length) setMessages(updatedMessages);
-      console.log(updatedMessages);
-    }, 1000);
-  }, []);
+    if (user) {
+      setInterval(() => {
+        const updatedMessages: IMessage[] = localStorage.getItem('message')
+          ? (JSON.parse(
+              localStorage.getItem('message') as string
+            ) as unknown as IMessage[])
+          : ([] as unknown as IMessage[]);
+        if (updatedMessages?.length) setMessages(updatedMessages);
+        console.log(updatedMessages);
+      }, 1000);
+    }
+  }, [user]);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim().length) {
@@ -72,9 +83,8 @@ const Chat = () => {
       w={'100vw'}
       h={'100vh'}
       bg={'white'}
-      pos={'relative'}
     >
-      {user && <UserGetter setUser={setUser} />}
+      <UserGetter setUser={setUser} showModal={showModal} />
       <Grid
         w={'500px'}
         h={'90vh'}
