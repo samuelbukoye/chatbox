@@ -9,13 +9,15 @@ const Chat = () => {
       justifyContent={'center'}
       w={'100vw'}
       h={'100vh'}
+      bg={'white'}
     >
       <Grid
         w={'500px'}
-        h={'1000px'}
-        gridTemplateRows={'200px 1fr 200px'}
+        h={'90vh'}
+        gridTemplateRows={'20% 1fr 20%'}
         borderRadius={'xl'}
         overflow={'hidden'}
+        border={'5px solid black'}
       >
         <Header />
         <Messages />
