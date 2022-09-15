@@ -1,47 +1,49 @@
-import { TriangleDownIcon } from '@chakra-ui/icons';
-import { Avatar, Grid, GridItem, Text } from '@chakra-ui/react';
+import { ChevronUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
+import { Avatar, Button, Grid, GridItem, Text } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { IMessage, setNumberStateType } from '../../utils/interfaces';
 
-const Messages = () => {
-  const [messages, setMessages] = useState([
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'computer', text: 'Hi, My Name is HoneyChat' },
-    { user: 'me', text: 'Hey there' },
-    { user: 'girlie', text: 'Hey there' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    { user: 'me', text: 'Myself Ferin Patel' },
-    {
-      user: 'computer',
-      text: "Nice to meet you. You can send me message and i'll reply you with same message.",
-    },
-  ]);
+interface propArgs {
+  messages: IMessage[];
+  user: string;
+  isPaginated: boolean;
+  setPagination: setNumberStateType;
+}
 
-  const user = 'me';
+const Messages = ({ messages, user, isPaginated, setPagination }: propArgs) => {
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const AlwaysScrollToBottom = () => {
-    const elementRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-      if (elementRef?.current) {
-        elementRef.current.scrollIntoView();
-      }
-    });
-
-    return <Grid ref={elementRef} />;
-  };
+  useEffect(() => {
+    if (elementRef?.current && !isScrolled) {
+      elementRef.current.scrollIntoView();
+      setIsScrolled(true);
+    }
+  }, [isScrolled]);
 
   return (
     <Grid w="full" h="Full" overflowY="scroll" pt="6" pb="3" px="3" gridGap="6">
+      {isPaginated && (
+        <GridItem w="full" alignItems="center" justifyContent="center">
+          <Button
+            w="max-content"
+            margin="auto"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            rightIcon={<ChevronUpIcon />}
+            colorScheme="blue"
+            fontWeight="bold"
+            py="2"
+            px="3"
+            borderRadius="2xl"
+            onClick={() => setPagination((old) => old + 1)}
+          >
+            Show More
+          </Button>
+        </GridItem>
+      )}
+
       {messages.map((item, index) => {
         if (item.user === user) {
           return (
@@ -129,7 +131,7 @@ const Messages = () => {
           );
         }
       })}
-      <AlwaysScrollToBottom />
+      <Grid ref={elementRef} />
     </Grid>
   );
 };
